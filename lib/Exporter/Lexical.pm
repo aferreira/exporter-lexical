@@ -28,6 +28,22 @@ This module is quite experimental, and may change a lot in the future as I
 figure out how it should work. It is very much a proof of concept for the
 moment.
 
+This module takes a hash of C<import> args as configuration, with these keys:
+
+=over 4
+
+=item -exports
+
+The value of this key can either be an arrayref, in which case the elements of
+the arrayref will be treated as function names to look for in the current
+package and export, or a hashref, in which case the keys will be function names
+and the values will be coderefs.
+
+=back
+
+Importing this module will also install an C<import> method into your module,
+which will handle the exporting process as configured by the import args.
+
 =cut
 
 use XSLoader;
@@ -65,6 +81,11 @@ This function just creates the method that it would install as your package's
 C<import> method, without actually installing it. This lets you write your own
 import method that does whatever you want it to do, while still being able to
 export from it.
+
+This function takes a hashref of arguments which correspond to the arguments
+you would pass to C<import>, followed by an optional package name to get the
+subs from, if you're exporting subs by name. The default is to get the subs
+from the calling package.
 
 =cut
 
