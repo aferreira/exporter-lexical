@@ -4,6 +4,32 @@ use warnings;
 use 5.018;
 # ABSTRACT: exporter for lexical subs
 
+=head1 SYNOPSIS
+
+  package My::Exporter;
+  use Exporter::Lexical -exports => [ 'foo' ]
+  sub foo { "FOO" }
+
+  package MyApp;
+
+  {
+      use My::Exporter;
+      warn foo(); # FOO
+  }
+  warn foo(); # Undefined subroutine &main::foo called
+
+=head1 DESCRIPTION
+
+This module allows you to export lexical subs from your exporter module. It is
+implemented using the new C<lexical_subs> feature in perl 5.18, so the
+functions truly are lexical (unlike some of the previous attempts).
+
+This module is quite experimental, and may change a lot in the future as I
+figure out how it should work. It is very much a proof of concept for the
+moment.
+
+=cut
+
 use XSLoader;
 XSLoader::load(
     __PACKAGE__,
@@ -46,10 +72,56 @@ sub import {
     }
 }
 
+=head1 BUGS
+
+No known bugs.
+
+Please report any bugs through RT: email
+C<bug-exporter-lexical at rt.cpan.org>, or browse to
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Exporter-Lexical>.
+
+=head1 SEE ALSO
+
+L<Sub::Exporter::Lexical>
+
+L<Lexical::Import>
+
+L<feature/The 'lexical_subs' feature>
+
+=head1 SUPPORT
+
+You can find this documentation for this module with the perldoc command.
+
+    perldoc Exporter::Lexical
+
+You can also look for information at:
+
+=over 4
+
+=item * MetaCPAN
+
+L<https://metacpan.org/release/Exporter-Lexical>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Exporter-Lexical>
+
+=item * Github
+
+L<https://github.com/doy/exporter-lexical>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Exporter-Lexical>
+
+=back
+
 =begin Pod::Coverage
 
   lexical_import
 
 =end Pod::Coverage
+
+=cut
 
 1;
