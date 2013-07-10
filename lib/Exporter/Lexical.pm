@@ -47,12 +47,24 @@ sub import {
 
     my $caller = caller;
 
-    my $import = sub {
+    my $import = build_exporter(\%opts, $caller);
+
+    {
+        no strict 'refs';
+        *{ $caller . '::import' } = $import;
+    }
+}
+
+sub build_exporter {
+    my ($opts, $caller) = @_;
+    $caller //= caller;
+
+    return sub {
         my $caller_stash = do {
             no strict 'refs';
             \%{ $caller . '::' };
         };
-        my @exports = @{ $opts{'-exports'} };
+        my @exports = @{ $opts->{'-exports'} };
         my %exports = map { $_ => \&{ $caller_stash->{$_} } } @exports;
 
         for my $export (keys %exports) {
@@ -65,11 +77,6 @@ sub import {
         # for now by injecting a dummy statement right after the 'use'.
         _lex_stuff(";1;");
     };
-
-    {
-        no strict 'refs';
-        *{ $caller . '::import' } = $import;
-    }
 }
 
 =head1 BUGS
