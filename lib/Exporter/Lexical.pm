@@ -55,6 +55,19 @@ sub import {
     }
 }
 
+=func build_exporter(\%opts[, $caller])
+
+  my $import Exporter::Lexical::build_exporter({
+      -exports => ['foo'],
+  });
+
+This function just creates the method that it would install as your package's
+C<import> method, without actually installing it. This lets you write your own
+import method that does whatever you want it to do, while still being able to
+export from it.
+
+=cut
+
 sub build_exporter {
     my ($opts, $caller) = @_;
     $caller //= caller;
@@ -78,6 +91,14 @@ sub build_exporter {
         _lex_stuff(";1;");
     };
 }
+
+=func lexical_import($name, $sub)
+
+Installs C<$sub> as a lexical subroutine into the currently compiling lexical
+scope. Throws an error if there is no currently compiling lexical scope (for
+instance, if this is called at runtime).
+
+=cut
 
 =head1 BUGS
 
@@ -122,12 +143,6 @@ L<https://github.com/doy/exporter-lexical>
 L<http://cpanratings.perl.org/d/Exporter-Lexical>
 
 =back
-
-=begin Pod::Coverage
-
-  lexical_import
-
-=end Pod::Coverage
 
 =cut
 
