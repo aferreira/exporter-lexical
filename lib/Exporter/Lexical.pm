@@ -16,6 +16,8 @@ XSLoader::load(
 
 sub import {
     my $package = shift;
+    my %opts = @_;
+
     my $caller = caller;
 
     my $import = sub {
@@ -23,7 +25,7 @@ sub import {
             no strict 'refs';
             \%{ $caller . '::' };
         };
-        my @exports = @{ $caller_stash->{EXPORT} };
+        my @exports = @{ $opts{'-exports'} };
         my %exports = map { $_ => \&{ $caller_stash->{$_} } } @exports;
 
         for my $export (keys %exports) {
