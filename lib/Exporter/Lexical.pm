@@ -77,8 +77,14 @@ sub build_exporter {
             no strict 'refs';
             \%{ $caller . '::' };
         };
-        my @exports = @{ $opts->{'-exports'} };
-        my %exports = map { $_ => \&{ $caller_stash->{$_} } } @exports;
+        my %exports;
+        if (ref($opts->{'-exports'}) eq 'ARRAY') {
+            %exports = map { $_ => \&{ $caller_stash->{$_} } }
+                           @{ $opts->{'-exports'} };
+        }
+        elsif (ref($opts->{'-exports'}) eq 'HASH') {
+            %exports = %{ $opts->{'-exports'} };
+        }
 
         for my $export (keys %exports) {
             lexical_import($export, $exports{$export});
