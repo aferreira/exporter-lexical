@@ -45,4 +45,10 @@ sub import {
     }
 }
 
+=begin Pod::Coverage
+
+  lexical_import
+
+=end Pod::Coverage
+
 1;
