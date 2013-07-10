@@ -1,6 +1,7 @@
 package Exporter::Lexical;
 use strict;
 use warnings;
+use 5.018;
 # ABSTRACT: exporter for lexical subs
 
 use XSLoader;
