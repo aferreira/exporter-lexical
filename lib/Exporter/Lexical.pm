@@ -110,12 +110,6 @@ sub build_exporter {
         for my $export (keys %exports) {
             lexical_import($export, $exports{$export});
         }
-
-        # XXX there is a bug with lexical_import where the pad entry sequence
-        # numbers are incorrect when used with 'use', so the first statement
-        # after the 'use' statement doesn't see the lexical. hack around this
-        # for now by injecting a dummy statement right after the 'use'.
-        _lex_stuff(";1;");
     };
 }
 
